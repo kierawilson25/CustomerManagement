@@ -4,6 +4,10 @@ public class TransactionsByCustomerReport extends Report {
     String reportType = "Transactions Report";
     String reportString = "";
 
+    public String getReportType(){
+        return this.reportType;
+    };
+
 
 
     public String runReport(String custName){

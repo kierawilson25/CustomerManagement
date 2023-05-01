@@ -5,6 +5,11 @@ public class NewCustomerByMonth extends Report{
     int newCustomers;
     String newCustomersString = "";
 
+
+    public String getReportType(){
+        return this.reportType;
+    };
+
     //quick fix to abstract method
     public String runReport(){
         return "Please Supply a month ";
