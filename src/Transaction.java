@@ -1,7 +1,14 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Transaction {
+public class Transaction implements Serializable {
     static ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
     
     private Customer customer;
@@ -10,6 +17,7 @@ public class Transaction {
     private String[] dateArray; 
     private String dateString;
 
+    //Expects a date in this format 2023-04-22 
     public Transaction(Customer inCustomer, String inSpray, int inPayment, String inDate){
         customer = inCustomer;
         spraySolution = inSpray;
@@ -17,6 +25,8 @@ public class Transaction {
         dateString = inDate;
         dateArray = inDate.split("-");
         transactionList.add(this);
+        saveTransactions();
+        getTransactions();
     }
 
     public Transaction(Customer inCustomer, int inPayment, String inDate){
@@ -25,6 +35,13 @@ public class Transaction {
         dateString = inDate;
         dateArray = inDate.split("-");
         transactionList.add(this);
+        saveTransactions();
+        getTransactions();
+    }
+
+    public void addTransaction(Customer inCustomer, String inSpray, int inPayment, String inDate){
+        Transaction newTransaction = new Transaction(inCustomer, inSpray, inPayment, inDate);
+
     }
 
     public static ArrayList<Transaction> getTransactionList(){
@@ -85,6 +102,37 @@ public class Transaction {
         String result = "";
         result = "Name: " + getCustomerName() + "\n" + "Spray Solution: " + spraySolution + "\n" +  "Payment: " + payment + " \n" + "Date: " + dateString + "\n";
         return result;
+    }
+
+    static void saveTransactions(){
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream("transactionData");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);) {
+
+        objectOutputStream.writeObject(transactionList);
+
+        } catch (FileNotFoundException e) {
+        System.out.println("File not found : " + e);
+        throw new RuntimeException(e);
+        } catch (IOException ioe) {
+        System.out.println("Error while writing data : "+ ioe);
+        ioe.printStackTrace();
+        }
+    }
+
+    static void getTransactions(){
+        try (FileInputStream fileInputStream = new FileInputStream("transactionData");
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
+            transactionList = (ArrayList) objectInputStream.readObject();
+            for (Object transaction : transactionList){
+                    transaction = (Transaction) transaction;
+            }
+            } catch (IOException ioe) {
+            ioe.printStackTrace();
+            } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            }
     }
 
 }

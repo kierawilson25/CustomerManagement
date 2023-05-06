@@ -1,11 +1,19 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 
-public class Customer {
+public class Customer implements Serializable {
     static ArrayList<Customer> customerList = new ArrayList<Customer>();
+    static boolean updated;
     //encapsulation
     private String name;
     private String  number;
@@ -13,15 +21,21 @@ public class Customer {
     private String regMonth;
     private String regYear;
     private int sprayTans;
+    
     //private Promo promo;
     // in class over loading a constructor 
+    public Customer(String inName){
+        name = inName;
+    }
+
     public Customer(String inputName, String inputNumber, String inputNotes){
         this.name = inputName;
         this.number = inputNumber;
         this.notes = inputNotes;
         this.addNewCust();
         customerList.add(this);
-
+        saveCustomers();
+        getCustomerList();
     }
 
     public Customer(String inputName, String inputNumber, String inputNotes, int inputSprays, String inputMonth, String inputYear){
@@ -32,19 +46,38 @@ public class Customer {
         this.regMonth = inputMonth;
         this.regYear = inputYear;
         customerList.add(this);
+        updated = true;
+        saveCustomers();
+        getCustomerList();
     }
+
     public String toString(){
+        getCustomers();
         String finalString = "";
         finalString = "Name: "+ name + "\n" + "Number: "+ number + "\n" + "Notes: "+ notes + "\n" + "Registration Date: " + regMonth +  " " + regYear+ "\n" + "Spray Tans: "+ sprayTans + "\n";
         return finalString;
     }
 
     static public ArrayList<Customer> getCustomerList(){
+        getCustomers();
         return customerList;
+    }
+
+    public static Customer getCustomer(String name){
+        Customer placeholdCustomer = new Customer(name);
+        for (Customer customer : customerList) {
+            if(customer.name.equals(name))
+            {
+                return customer;
+            }
+        }
+        return placeholdCustomer;
     }
 
     static void addCustomer(Customer newCustomer){
         customerList.add(newCustomer);
+        saveCustomers();
+        getCustomerList();
     }
 
     public String getName(){
@@ -118,6 +151,39 @@ public class Customer {
         return allDetails;
     }
 
+    static void saveCustomers(){
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream("customerData");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);) {
+
+        objectOutputStream.writeObject(customerList);
+
+        } catch (FileNotFoundException e) {
+        System.out.println("File not found : " + e);
+        throw new RuntimeException(e);
+        } catch (IOException ioe) {
+        System.out.println("Error while writing data : "+ ioe);
+        ioe.printStackTrace();
+        }
+    }
+
+    static void getCustomers(){
+        try (FileInputStream fileInputStream = new FileInputStream("customerData");
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
+            customerList = (ArrayList) objectInputStream.readObject();
+            for (Object customer : customerList){
+                    customer = (Customer) customer;
+            }
+            } catch (IOException ioe) {
+            ioe.printStackTrace();
+            } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            }
+    }
+
+
+
     public static void main(String[] args) {
         
         //Customer Testing
@@ -133,9 +199,9 @@ public class Customer {
         Transaction sarahRapidSpray2 = new Transaction(myCustomer1, "Rapid", 40, "2023-07-22");
         Transaction kimRapidSpray = new Transaction(myCustomer, "Rapid", 40, "2023-14-22");
 
-        CustomerGUI gui = new CustomerGUI();
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.pack();
-        gui.setVisible(true);
+        //run the program
+        CustomerGUI.run();
+
+        
     }
 }
