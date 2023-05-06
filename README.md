@@ -1,17 +1,10 @@
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+To run this program, navigate to the Cusotmer.java file and run the main function
 
-## Folder Structure
+## About
 
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+This is a cutomer management system built for my spray tanning business SunnySkn.
 
 ## Dependency Management
 
