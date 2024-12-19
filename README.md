@@ -4,7 +4,23 @@ To run this program, navigate to the Cusotmer.java file and run the main functio
 
 ## About
 
-This is a cutomer management system built for my spray tanning business SunnySkn.
+This is a cutomer management system built for a spray tanning business SunnySkn.
+
+In the System you can add customers, add appointments, view profits by month, search customers, view appointments.
+
+This project exhibits an understanding of 
+
+**Fundamental Java Concept**
+
+- Object Oriented Programing
+- Polymorphism
+- Encapsulation
+- Abstraction
+- Inheritance
+
+
+
+
 
 ## Dependency Management
 
