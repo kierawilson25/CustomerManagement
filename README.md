@@ -10,9 +10,8 @@ In the System you can add customers, add appointments, view profits by month, se
 
 This project exhibits an understanding of 
 
-**Fundamental Java Concept**
+**Fundamental Object Oriented Programing Concept**
 
-- Object Oriented Programing
 - Polymorphism
 - Encapsulation
 - Abstraction
